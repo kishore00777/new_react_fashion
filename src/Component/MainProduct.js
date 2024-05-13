@@ -31,11 +31,7 @@ export default function MainProduct() {
         )}
         <br />
         <br />
-        <Grid
-          container
-          spacing={3}
-          sx={{ display: "flex", justifyContent: "center" }}
-        >
+        <Grid container spacing={3} sx={{ display: "flex", justifyContent: "center" }}>
           <ProductCard data={product} />
         </Grid>
         <br />

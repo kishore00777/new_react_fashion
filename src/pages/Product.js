@@ -226,7 +226,6 @@ export default function Product() {
   //   }
   // }, [data]);
   // product?brand={}&title{}=&id={}
-  console.log(baseUrl);
 
   return (
     <>

@@ -160,13 +160,13 @@ export const BoatP = {
   boat5: {
     img: [boat501, boat502, boat503, boat504, boat505],
     title:
-      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins & DIY Watch Face Studio Smartwatch  (Cherry Blossom Strap, Free Size)",
+      "boAt Storm Call 2 1.83 inch HD Display, BT Calling, boAt Coins, DIY Watch Face Studio Smartwatch (Cherry Blossom Strap, Free Size)",
     color: "Cherry Blossom Strap, Free Size",
     price: 1499,
     actualPrice: 6999,
     model: "boAt Storm Call 2",
     description:
-      "The boAt Storm Call 2 is here to simplify your life and become your fitness transformation partner This is going to get clear of any obstacles that may get in the way of your goals.The 1.83'' HD display makes everything a vibrant and vivid appeal. Thanks to the Advanced Bluetooth calling feature, you can stay in touch with your loved ones wherever you go. With its boAt Coins you may avail coupons based on fitness activities.Its DIY Watch Face Studio gives you the freedom to customize watch faces as per how you want them. Your heart rate, blood oxygen monitoring, and notifications will all keep you constantly connected to both the inside and outside world.The watch keeps you moving no matter what thanks to its IP67 dust, sweat, and splash resistance and multi-sport modes.",
+      "The boAt Storm Call 2 is here to simplify your life and become your fitness transformation partner This is going to get clear of any obstacles that may get in the way of your goals.The 1.83 inch HD display makes everything a vibrant and vivid appeal. Thanks to the Advanced Bluetooth calling feature, you can stay in touch with your loved ones wherever you go. With its boAt Coins you may avail coupons based on fitness activities.Its DIY Watch Face Studio gives you the freedom to customize watch faces as per how you want them. Your heart rate, blood oxygen monitoring, and notifications will all keep you constantly connected to both the inside and outside world.The watch keeps you moving no matter what thanks to its IP67 dust, sweat, and splash resistance and multi-sport modes.",
     spec: [
       "1.83 HD Display",
       "Bluetooth Calling: Built In Speaker & Mic, Dialpad, Ringtones and Save Contacts",
@@ -184,13 +184,13 @@ export const BoatP = {
   boat6: {
     img: [boat601, boat602, boat603, boat604, boat605],
     title:
-      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins & DIY Watch Face Studio Smartwatch  (Dark Blue Strap, Free Size)",
+      "boAt Storm Call 2 1.83 inch HD Display,BT Calling,boAt Coins, DIY Watch Face Studio Smartwatch  (Dark Blue Strap, Free Size)",
     color: "Dark Blue Strap, Free Size",
     price: 1499,
     actualPrice: 6999,
     model: "boAt Storm Call 2",
     description:
-      "The boAt Storm Call 2 is here to simplify your life and become your fitness transformation partner This is going to get clear of any obstacles that may get in the way of your goals.The 1.83'' HD display makes everything a vibrant and vivid appeal. Thanks to the Advanced Bluetooth calling feature, you can stay in touch with your loved ones wherever you go. With its boAt Coins you may avail coupons based on fitness activities.Its DIY Watch Face Studio gives you the freedom to customize watch faces as per how you want them. Your heart rate, blood oxygen monitoring, and notifications will all keep you constantly connected to both the inside and outside world.The watch keeps you moving no matter what thanks to its IP67 dust, sweat, and splash resistance and multi-sport modes.",
+      "The boAt Storm Call 2 is here to simplify your life and become your fitness transformation partner This is going to get clear of any obstacles that may get in the way of your goals.The 1.83 inch HD display makes everything a vibrant and vivid appeal. Thanks to the Advanced Bluetooth calling feature, you can stay in touch with your loved ones wherever you go. With its boAt Coins you may avail coupons based on fitness activities.Its DIY Watch Face Studio gives you the freedom to customize watch faces as per how you want them. Your heart rate, blood oxygen monitoring, and notifications will all keep you constantly connected to both the inside and outside world.The watch keeps you moving no matter what thanks to its IP67 dust, sweat, and splash resistance and multi-sport modes.",
     spec: [
       "1.83 HD Display",
       "Bluetooth Calling: Built In Speaker & Mic, Dialpad, Ringtones and Save Contacts",
@@ -232,7 +232,7 @@ export const BoatP = {
   boat8: {
     img: [boat801, boat802, boat803, boat804, boat805],
     title:
-      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins & DIY Watch Face Studio Smartwatch  (Green Strap, Free Size)",
+      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins, DIY Watch Face Studio Smartwatch  (Green Strap, Free Size)",
     color: "Green Strap, Free Size",
     price: 1499,
     actualPrice: 6999,
@@ -256,7 +256,7 @@ export const BoatP = {
   boat9: {
     img: [boat901, boat902, boat903, boat904, boat905],
     title:
-      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins & DIY Watch Face Studio Smartwatch  (Metal Black Strap, Free Size)",
+      "boAt Storm Call 2 1.83'' HD Display,BT Calling,boAt Coins, DIY Watch Face Studio Smartwatch  (Metal Black Strap, Free Size)",
     color: "Metal Black Strap, Free Size",
     price: 1349,
     actualPrice: 7499,

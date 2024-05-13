@@ -71,9 +71,7 @@ export default function DealoftheDay() {
   useEffect(() => {
     GetProduct();
   }, []);
-  console.log(data);
-  // console.log(data.map((i) => i.dealHead));
-  // console.log(data.map((i) => `https://test-ff63e.web.app/assets/${i.img}`));
+
   const Loader = () => {
     return (
       <>

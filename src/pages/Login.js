@@ -23,9 +23,7 @@ export default function Login() {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
-  console.log("mail:", data.mail);
-  console.log("Password:", data.Password);
-  console.log(data);
+
   const Login = async (e) => {
     e.preventDefault();
     try {

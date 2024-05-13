@@ -112,5 +112,5 @@ export const product = [
   },
 ].map((item, index) => ({
   ...item,
-  id: "fashion0" + index * 999 + index.toString(),
+  id: "fashion0" + index,
 }));
