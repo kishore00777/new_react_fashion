@@ -1,5 +1,5 @@
 import { ProductsFromSlice } from "../Store/Reducer/ProductSlice";
-import ProductCard from "../Component/ProductCard";
+import ProductCard from "./ProductCard";
 import { Grid, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import "@fontsource/poppins";

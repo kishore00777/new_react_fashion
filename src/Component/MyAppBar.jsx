@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function MyAppBar() {
   return (
     <>
-      <AppBar  sx={{ bgcolor: "black", position: "sticky" }}>
+      <AppBar sx={{ bgcolor: "black", position: "sticky" }}>
         <Toolbar
           sx={{
             padding: 1,
@@ -24,7 +24,7 @@ export default function MyAppBar() {
                 style={{
                   color: "white",
                   fontWeight: "900",
-                  fontSize: "30px",
+                  fontSize: "35px",
                   textDecoration: "none",
                   display: "flex",
                   alignItems: "center",
@@ -32,7 +32,11 @@ export default function MyAppBar() {
               >
                 Fashion
                 <Typography
-                  sx={{ color: "pink", fontWeight: "700", fontSize: "30px" }}
+                  sx={{
+                    color: "#ff36ab",
+                    fontWeight: "700",
+                    fontSize: "40px",
+                  }}
                 >
                   .
                 </Typography>
