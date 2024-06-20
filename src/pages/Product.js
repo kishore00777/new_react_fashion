@@ -419,6 +419,9 @@ export default function Product() {
                             />
                           </IconButton>
                         </Grid>
+                        <Button variant="contained" color="secondary">
+                          BuyNow
+                        </Button>
                       </Grid>
                     </Box>
                   </Box>

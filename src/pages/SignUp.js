@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,11 +11,37 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "axios";
+import { baseurl } from "../Config/Common";
+
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const [data, setData] = useState({
+    userName: "",
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
   };
+  const Signup = async () => {
+    try {
+      const response = await axios.post(`${baseurl}/user/signUp`, {
+        userName: data.userName,
+        email: data.email,
+        password: data.password,
+      });
+      console.log(response.data);
+      setData({
+        userName: "",
+        email: "",
+        password: "",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -34,15 +60,12 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
+                  value={data.firstName}
+                  onChange={handleChange}
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -51,19 +74,23 @@ export default function SignUp() {
                   label="First Name"
                   autoFocus
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Grid> */}
+              <Grid item xs={12}>
                 <TextField
+                  value={data.name}
+                  onChange={handleChange}
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
+                  id="userNmae"
+                  label="User Name"
+                  name="userName"
                   autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  value={data.email}
+                  onChange={handleChange}
                   required
                   fullWidth
                   id="email"
@@ -74,6 +101,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  value={data.password}
+                  onChange={handleChange}
                   required
                   fullWidth
                   name="password"
@@ -83,20 +112,22 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <FormControlLabel
                   control={
                     <Checkbox value="allowExtraEmails" color="primary" />
                   }
                   label="Remember me"
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={() => {
+                Signup();
+              }}
             >
               Sign Up
             </Button>

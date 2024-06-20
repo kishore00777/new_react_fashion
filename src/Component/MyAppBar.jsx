@@ -1,4 +1,12 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -41,12 +49,18 @@ export default function MyAppBar() {
                   .
                 </Typography>
               </Link>
-              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
+                }}
+              >
                 <Link
                   to="/"
                   style={{
                     color: "white",
-                    fontWeight: "500",
+                    fontWeight: "300",
                     fontSize: "20px",
                     textDecoration: "none",
                     margin: 15,
@@ -58,7 +72,7 @@ export default function MyAppBar() {
                   to="/shop"
                   style={{
                     color: "white",
-                    fontWeight: "500",
+                    fontWeight: "300",
                     fontSize: "20px",
                     textDecoration: "none",
                     margin: 15,
@@ -70,13 +84,42 @@ export default function MyAppBar() {
                   to="/about"
                   style={{
                     color: "white",
-                    fontWeight: "500",
+                    fontWeight: "300",
                     fontSize: "20px",
                     textDecoration: "none",
                     margin: 15,
                   }}
                 >
                   About
+                </Link>
+                {/* <Link
+                  to="/addproduct"
+                  style={{
+                    color: "white",
+                    fontWeight: "300",
+                    fontSize: "20px",
+                    textDecoration: "none",
+                    margin: 15,
+                  }}
+                >
+                  Add Product
+                </Link> */}
+                <Link
+                  to="/logIn"
+                  style={{
+                    color: "white",
+                    fontWeight: "300",
+                    fontSize: "20px",
+                    textDecoration: "none",
+                    margin: 15,
+                  }}
+                >
+                  {/* <Avatar sx={{ bgcolor: "#ff36ab" }}>
+                    <Typography sx={{ fontWeight: 500, fontSize: "18px" }}>
+                      F
+                    </Typography>
+                  </Avatar> */}
+                  <Button sx={{ color: "#ff36ab" }}>Login</Button>
                 </Link>
               </Box>
             </Box>

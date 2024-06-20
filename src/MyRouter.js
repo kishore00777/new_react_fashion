@@ -7,6 +7,12 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Product from "./pages/Product";
+import AddProduct from "./Component/Admin/AddProduct";
+import ShippingPolicy from "./pages/ShippingPolicy";
+import ContactUs from "./pages/ContactUs";
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CancellationPolicy from "./pages/CancellationPolicy";
 
 export default function MyRouter() {
   return (
@@ -17,8 +23,17 @@ export default function MyRouter() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/product" element={<Product />} />
         <Route path="/about" element={<About />} />
+        <Route path="/addproduct" element={<AddProduct />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/shippingPolicy" element={<ShippingPolicy />} />
+        <Route path="/contactUs" element={<ContactUs />} />
+        <Route path="/termsAndConditions" element={<Terms />} />
+        <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
+        <Route
+          path="/cancellationPolicy"
+          element={<CancellationPolicy />}
+        />
       </Routes>
     </BrowserRouter>
   );
