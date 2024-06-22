@@ -8,15 +8,32 @@ export default function Footer() {
     { name: "Contact Us", href: "contactUs" },
     { name: "Terms and Conditions", href: "termsAndConditions" },
     { name: "Privacy Policy", href: "privacyPolicy" },
-    { name: "Cancellation/Refund Policy", href: "cancellationPolicy" },
+    { name: "Cancellation Policy", href: "cancellationPolicy" },
   ];
   return (
-    <Box sx={{ bgcolor: "lightpink", padding: 4 }}>
-      <Grid container spacing={4}>
+    <Box sx={{ bgcolor: "black", padding: 4 }}>
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
         {list.map((i) => (
           <Grid item>
             {" "}
-            <Link to={`/${i.href}`}>{i.name}</Link>
+            <Link
+              to={`/${i.href}`}
+              style={{
+                textDecoration: "none",
+                color: "#ff36ab",
+                fontSize: "12px",
+              }}
+            >
+              {i.name}
+            </Link>
           </Grid>
         ))}
       </Grid>

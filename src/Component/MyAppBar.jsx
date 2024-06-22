@@ -119,7 +119,17 @@ export default function MyAppBar() {
                       F
                     </Typography>
                   </Avatar> */}
-                  <Button sx={{ color: "#ff36ab" }}>Login</Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      bgcolor: "#ff36ab",
+                      color: "#ffffff",
+                      fontWeight: "600",
+                      "&:hover": { bgcolor: "#ff36ab", color: "#ffffff" },
+                    }}
+                  >
+                    Login
+                  </Button>
                 </Link>
               </Box>
             </Box>

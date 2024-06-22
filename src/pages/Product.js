@@ -16,6 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
 import React, { useEffect, useState } from "react";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import ReplyIcon from "@mui/icons-material/Reply";
@@ -30,6 +31,7 @@ import Gmail from "../assets/Gmail.svg";
 import axios from "axios";
 import Facebook from "../assets/Facebook.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import logos from "../logo.svg";
 const settings = {
   dots: false,
   infinite: true,
@@ -227,6 +229,38 @@ export default function Product() {
   // }, [data]);
   // product?brand={}&title{}=&id={}
 
+  const handlePayment = async (price) => {
+    const options = {
+      key: "rzp_test_42qGrGuKRKTTXI", // Replace with your Razorpay Key,
+      key_secret: "70NSAuXXCdkrImE87wz4g8OH",
+      amount: `${price}00`, // Amount in paise (e.g., 50000 for ₹500)
+      currency: "INR",
+      name: "Fashion",
+      description: "Payment for your service",
+      image: logos, // Your logo URL
+      // order_id: "order_HXa8kEi5uIMz9u", // Generate a new order_id using your backend
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
+      },
+      prefill: {
+        name: "Kishore",
+        email: "kishoremurgan0077@gmail.com",
+        contact: "6382517181",
+      },
+      notes: {
+        address: "Chennai",
+      },
+      theme: {
+        color: "#ff36ab",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  };
+
   return (
     <>
       {/* {load && <Loading />} */}
@@ -317,8 +351,11 @@ export default function Product() {
                       position: "sticky",
                       top: 120,
                       height: "100%",
+                      mb: 10,
                     }}
                   >
+                    {/* ---------------------------------------IMAGES---------------------------------------------- */}
+
                     <Grid sx={{}}>
                       {i.file.img.map((a, b) => (
                         <Card
@@ -349,82 +386,134 @@ export default function Product() {
                         </Card>
                       ))}
                     </Grid>
-                    <Box sx={{}}>
+                    {/* ---------------------------------------IMAGE---------------------------------------------- */}
+                    <Grid
+                      sx={{
+                        position: "relative",
+                        width: 400,
+                        height: 400,
+                        mt: 1,
+                      }}
+                    >
+                      <img
+                        src={i.file.img[slide]}
+                        alt={i.file.title}
+                        width={400}
+                        height={400}
+                        onLoad={() => handleLoad()}
+                        loading="lazy"
+                      />
+                      {/* ---------------------------------------Icons {WHISLIST} & {SHARE} Icons---------------------------------------------- */}
                       <Grid
                         sx={{
-                          position: "relative",
-                          width: 400,
-                          height: 400,
+                          position: "absolute",
+                          right: 8,
+                          top: 12,
+                          display: "flex",
+                          flexDirection: "column",
                         }}
                       >
-                        <img
-                          src={i.file.img[slide]}
-                          alt={i.file.title}
-                          width={400}
-                          height={400}
-                          onLoad={() => handleLoad()}
-                          loading="lazy"
-                        />
-
-                        <Grid
+                        <IconButton
+                          onClick={() => {
+                            setFavourite(!favourite);
+                          }}
                           sx={{
-                            position: "absolute",
-                            right: 8,
-                            top: 12,
-                            display: "flex",
-                            flexDirection: "column",
+                            bgcolor: "white",
+                            "&:hover": { bgcolor: "white" },
+                            width: 35,
+                            height: 35,
+                            // border: "1px solid #CECECE",
+                            // boxShadow: "0px 0px 1px 0px #000000",
                           }}
                         >
-                          <IconButton
-                            onClick={() => {
-                              setFavourite(!favourite);
-                            }}
+                          <FavoriteRoundedIcon
                             sx={{
-                              bgcolor: "white",
-                              "&:hover": { bgcolor: "white" },
-                              width: 35,
-                              height: 35,
-                              // border: "1px solid #CECECE",
-                              // boxShadow: "0px 0px 1px 0px #000000",
+                              fontSize: "20px",
+                              color: favourite
+                                ? "#FF3040"
+                                : "rgb(157,158,157,0.5)",
                             }}
-                          >
-                            <FavoriteRoundedIcon
-                              sx={{
-                                fontSize: "20px",
-                                color: favourite
-                                  ? "#FF3040"
-                                  : "rgb(157,158,157,0.5)",
-                              }}
-                            />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => {
-                              setOpen(true);
-                              setCopy(baseUrl);
-                            }}
+                          />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => {
+                            setOpen(true);
+                            setCopy(baseUrl);
+                          }}
+                          sx={{
+                            bgcolor: "white",
+                            "&:hover": { bgcolor: "white" },
+                            width: 35,
+                            height: 35,
+                            mt: 2,
+                          }}
+                        >
+                          <ReplyIcon
                             sx={{
-                              bgcolor: "white",
-                              "&:hover": { bgcolor: "white" },
-                              width: 35,
-                              height: 35,
-                              mt: 2,
+                              fontSize: "30px",
+                              transform: "scaleX(-1)",
+                              color: "rgb(157,158,157,0.5)",
                             }}
-                          >
-                            <ReplyIcon
-                              sx={{
-                                fontSize: "30px",
-                                transform: "scaleX(-1)",
-                                color: "rgb(157,158,157,0.5)",
-                              }}
-                            />
-                          </IconButton>
-                        </Grid>
-                        <Button variant="contained" color="secondary">
-                          BuyNow
-                        </Button>
+                          />
+                        </IconButton>
                       </Grid>
-                    </Box>
+                      {/* ---------------------------------------button {BUY NOW} & {ADD TO CART} button---------------------------------------------- */}
+                      <Grid container spacing={2} sx={{ mt: 1 }}>
+                        <Grid item xs={6}>
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                              color: "white",
+                              bgcolor: "orange",
+                              "&:hover": {
+                                color: "white",
+                                bgcolor: "orange",
+                              },
+                              padding: "10px 10px",
+                              height: 55,
+
+                              fontWeight: "500",
+                              fontSize: "17px",
+                            }}
+                            onClick={() => {
+                              handlePayment(i.file.price);
+                            }}
+                          >
+                            Add to Cart
+                          </Button>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            sx={{
+                              color: "white",
+                              bgcolor: "green",
+                              "&:hover": {
+                                color: "white",
+                                bgcolor: "green",
+                              },
+                              padding: "10px 10px",
+                              height: 55,
+
+                              fontWeight: "500",
+                              fontSize: "17px",
+                            }}
+                            onClick={() => {
+                              handlePayment(i.file.price);
+                            }}
+                          >
+                            <FlashOnIcon sx={{ fontSize: "19px" }} /> &nbsp;Buy
+                            Now
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Box>
+
+                  {/* --------------------------------------- PRODUCT DETAILS---------------------------------------------- */}
+
                   <Grid sx={{ padding: 2, pt: 0, overflowX: "auto" }}>
                     <Typography align="left" sx={{ fontSize: "18px" }}>
                       {i.file.title}
