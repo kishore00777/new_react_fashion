@@ -2,9 +2,8 @@ import { Box, Grid } from "@mui/material";
 import React from "react";
 import Brand from "../Component/Home/Brand";
 import DealoftheDay from "../Component/Home/DealoftheDay";
-import BestSeller from "../Component/Home/BestSeller";
+// import BestSeller from "../Component/Home/BestSeller";
 import MainProduct from "../Component/MainProduct";
-import Footer from "../Component/Home/Footer";
 
 export default function Home() {
   return (
@@ -34,7 +33,6 @@ export default function Home() {
       >
         <MainProduct />
       </Grid>
-      <Footer />
     </>
   );
 }

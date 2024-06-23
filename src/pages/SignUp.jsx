@@ -11,33 +11,56 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios from "axios";
-import { baseurl } from "../Config/Common";
+import { Instance, setToken } from "../Config/Common";
+import { useDispatch } from "react-redux";
+import {
+  loginFail,
+  loginStart,
+  loginSuccess,
+} from "../Store/Reducer/AuthSlice";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
     userName: "",
     email: "",
     password: "",
   });
+  const [check, setCheck] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
+
   const Signup = async () => {
+    dispatch(loginStart());
     try {
-      const response = await axios.post(`${baseurl}/user/signUp`, {
+      const response = await Instance.post(`/api/auth/user/signUp`, {
         userName: data.userName,
         email: data.email,
         password: data.password,
       });
-      console.log(response.data);
+      const { token } = response.data;
+      const { id } = response.data;
+      dispatch(loginSuccess(response.data));
+      setToken(token);
+      cookies.set("token-fashion", token);
+      cookies.set("id", id);
+      localStorage.setItem(check && "token", token);
+      navigate("/shop");
       setData({
         userName: "",
         email: "",
         password: "",
       });
     } catch (err) {
+      dispatch(loginFail(err));
       console.error(err);
     }
   };
@@ -112,14 +135,19 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
-              {/* <Grid item xs={12}>
+              <Grid item xs={12}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox
+                      checked={check}
+                      value="allowExtraEmails"
+                      color="primary"
+                      onChange={(e) => setCheck(e.target.checked)}
+                    />
                   }
                   label="Remember me"
                 />
-              </Grid> */}
+              </Grid>
             </Grid>
             <Button
               fullWidth

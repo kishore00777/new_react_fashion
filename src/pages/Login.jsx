@@ -3,47 +3,57 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios from "axios";
+import { Instance, setToken } from "../Config/Common";
+import {
+  loginFail,
+  loginStart,
+  loginSuccess,
+} from "../Store/Reducer/AuthSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 export default function Login() {
   const [data, setData] = useState({
     mail: "",
     Password: "",
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const cookies = new Cookies();
 
   const HandleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const Login = async (e) => {
-    e.preventDefault();
+  const onLogin = async () => {
     try {
-      const response = await axios.post(
-        "https://test-ff63e.web.app/Product.json",
-        {
-          mail: data.mail,
-          Password: data.Password,
-        }
-      );
-      if (response.status === 200) {
-        alert("success");
-      }
+      dispatch(loginStart());
+      const response = await Instance.post(`/api/auth/user/logIn`, {
+        email: data.mail,
+        password: data.Password,
+      });
+      const { token } = response.data;
+      const { id } = response.data;
+      dispatch(loginSuccess(response.data));
+      setToken(token);
+      cookies.set("token-fashion", token);
+      cookies.set("id", id);
+      navigate("/shop");
     } catch (err) {
+      dispatch(loginFail(err));
       console.error(err);
     }
   };
   return (
     <>
-      <Container component="main" maxWidth="xs">
+      <Container maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -59,7 +69,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Log in
           </Typography>
-          <Box component="form" noValidate onSubmit={Login} sx={{ mt: 1 }}>
+          <Box sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -84,16 +94,14 @@ export default function Login() {
               value={data.Password}
               onChange={HandleChange}
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
+
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              //   onClick={() => Login}
+              onClick={() => {
+                onLogin();
+              }}
             >
               Log In
             </Button>

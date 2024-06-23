@@ -24,6 +24,7 @@ import Loading from "../Component/Loading";
 import Slider from "react-slick";
 import ProductCard from "../Component/ProductCard";
 import { CloseSharp, WhatsApp } from "@mui/icons-material";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import x from "../assets/X.svg";
 import Instagram from "../assets/Instagram.svg";
 import WhatsAppImage from "../assets/WhatsApp.svg";
@@ -476,11 +477,12 @@ export default function Product() {
                               fontWeight: "500",
                               fontSize: "17px",
                             }}
-                            onClick={() => {
-                              handlePayment(i.file.price);
-                            }}
+                            // onClick={() => {
+                            //   handlePayment(i.file.price);
+                            // }}
                           >
-                            Add to Cart
+                            <ShoppingBagIcon x={{ fontSize: "19px" }} /> &nbsp;
+                            Add to Bag
                           </Button>
                         </Grid>
                         <Grid item xs={6}>
@@ -558,6 +560,7 @@ export default function Product() {
                         </>
                       )}
                     </Grid>
+
                     <Typography
                       align="left"
                       sx={{
@@ -864,6 +867,58 @@ export default function Product() {
                           </Card>
                         ) : null
                       )}
+                    </Grid>{" "}
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          sx={{
+                            color: "white",
+                            bgcolor: "orange",
+                            "&:hover": {
+                              color: "white",
+                              bgcolor: "orange",
+                            },
+                            padding: "10px 10px",
+                            height: 55,
+
+                            fontWeight: "500",
+                            fontSize: "17px",
+                          }}
+                          // onClick={() => {
+                          //   handlePayment(i.file.price);
+                          // }}
+                        >
+                          <ShoppingBagIcon x={{ fontSize: "19px" }} /> &nbsp;
+                          Add to Bag
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Button
+                          variant="contained"
+                          fullWidth
+                          sx={{
+                            color: "white",
+                            bgcolor: "green",
+                            "&:hover": {
+                              color: "white",
+                              bgcolor: "green",
+                            },
+                            padding: "10px 10px",
+                            height: 55,
+
+                            fontWeight: "500",
+                            fontSize: "17px",
+                          }}
+                          onClick={() => {
+                            handlePayment(i.file.price);
+                          }}
+                        >
+                          <FlashOnIcon sx={{ fontSize: "19px" }} /> &nbsp;Buy
+                          Now
+                        </Button>
+                      </Grid>
                     </Grid>
                     <Typography
                       sx={{
