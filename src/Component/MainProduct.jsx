@@ -1,20 +1,39 @@
-import { ProductsFromSlice } from "../Store/Reducer/ProductSlice";
 import ProductCard from "./ProductCard";
 import { Grid, Box, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
 import "@fontsource/poppins";
 import { useLocation } from "react-router-dom";
+import { Instance } from "../Config/Common";
+import { useEffect, useState } from "react";
+import Loading from "./Loading";
 
 export default function MainProduct() {
-  const product = useSelector(ProductsFromSlice);
-
   const router = useLocation();
   const path = router.pathname;
+
+  const [data, setData] = useState([]);
+  const [load, setLoad] = useState([]);
+
+  const getProduct = async () => {
+    try {
+      setLoad(true);
+      const response = await Instance.get("/api/products/getAllProducts");
+      setData(response.data);
+      console.log(response.data.map((i) => i.images[0]));
+      if (response.status === 200) {
+        setLoad(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getProduct();
+  }, []);
   return (
     <>
       <Box
         sx={{
-          maxWidth: "70%",
+          maxWidth: "90%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -31,9 +50,17 @@ export default function MainProduct() {
         )}
         <br />
         <br />
-        <Grid container spacing={3} sx={{ display: "flex", justifyContent: "center" }}>
-          <ProductCard data={product} />
-        </Grid>
+        {load ? (
+          <Loading />
+        ) : (
+          <Grid
+            container
+            spacing={3}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            <ProductCard data={data} />
+          </Grid>
+        )}
         <br />
         <br />
         <br />

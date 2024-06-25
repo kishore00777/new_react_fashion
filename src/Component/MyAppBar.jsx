@@ -19,7 +19,7 @@ import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import LockIcon from "@mui/icons-material/Lock";
-
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Instance } from "../Config/Common";
@@ -47,6 +47,7 @@ export default function MyAppBar() {
   const location = useLocation();
   const auth = useSelector((state) => state.auth?.isAuth);
   const userName = useSelector((state) => state.auth.user?.userName);
+  const mail = cookies.get("email-fashion");
 
   const LoGout = async () => {
     try {
@@ -118,7 +119,7 @@ export default function MyAppBar() {
         <MenuItem
           onClick={() => {
             handleClose();
-            navigate("/admin/changePassword");
+            navigate("/changePassword");
           }}
         >
           <ListItemIcon>
@@ -126,6 +127,19 @@ export default function MyAppBar() {
           </ListItemIcon>
           Change Password
         </MenuItem>
+        {mail === "kishoremurgan0077@gmail.com" && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              navigate("/admin/addproduct");
+            }}
+          >
+            <ListItemIcon>
+              <LockIcon fontSize="small" />
+            </ListItemIcon>
+            Admin
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             LoGout();
@@ -195,7 +209,7 @@ export default function MyAppBar() {
                 }}
               >
                 <IconButton>
-                  <ShoppingBagIcon sx={{ color: "white", fontSize: "30px" }} />
+                  <ShoppingCartIcon sx={{ color: "white", fontSize: "30px" }} />
                 </IconButton>{" "}
                 <IconButton>
                   <MenuIcon sx={{ color: "white", fontSize: "35px" }} />
@@ -279,6 +293,22 @@ export default function MyAppBar() {
                   Shop
                 </Link>
                 <Link
+                  to="/cart"
+                  style={{
+                    color: "white",
+                    fontWeight: "300",
+                    fontSize: "20px",
+                    textDecoration: "none",
+                    margin: 15,
+                  }}
+                >
+                  <IconButton>
+                    <ShoppingCartIcon
+                      sx={{ color: "white", fontSize: "30px" }}
+                    />
+                  </IconButton>{" "}
+                </Link>
+                {/* <Link
                   to="/about"
                   style={{
                     color: "white",
@@ -289,18 +319,6 @@ export default function MyAppBar() {
                   }}
                 >
                   About
-                </Link>
-                {/* <Link
-                  to="/addproduct"
-                  style={{
-                    color: "white",
-                    fontWeight: "300",
-                    fontSize: "20px",
-                    textDecoration: "none",
-                    margin: 15,
-                  }}
-                >
-                  Add Product
                 </Link> */}
 
                 {location.pathname === "/login" ||

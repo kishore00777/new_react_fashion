@@ -15,6 +15,8 @@ export const setToken = (token) => {
 export const baseurl = "https://new-fashion-backend.onrender.com";
 // export const baseurl = "http://localhost:9999";
 
+export const imageUrl = `${baseurl}/images/`;
+
 export const Instance = axios.create({
   baseURL: baseurl,
   headers: { "x-auth-token": token },

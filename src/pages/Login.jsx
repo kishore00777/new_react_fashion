@@ -41,9 +41,11 @@ export default function Login() {
       });
       const { token } = response.data;
       const { id } = response.data;
+      const { email } = response.data;
       dispatch(loginSuccess(response.data));
       setToken(token);
       cookies.set("token-fashion", token);
+      cookies.set("email-fashion", email);
       cookies.set("id", id);
       navigate("/shop");
     } catch (err) {

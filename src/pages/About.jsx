@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
+import Footer from "../Component/Footer";
 
 export default function About() {
   return (
-    <div>
+    <>
       About
-    </div>
-  )
+      <Footer />
+    </>
+  );
 }

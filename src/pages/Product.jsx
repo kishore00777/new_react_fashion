@@ -33,6 +33,7 @@ import axios from "axios";
 import Facebook from "../assets/Facebook.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import logos from "../logo.svg";
+import { Instance, imageUrl } from "../Config/Common";
 const settings = {
   dots: false,
   infinite: true,
@@ -60,8 +61,6 @@ const StyledBox = styled(Box)({
   padding: 4,
 });
 export default function Product() {
-  const AllProducts = useSelector(ProductsFromSlice);
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brand = searchParams.get("brand");
@@ -104,13 +103,6 @@ export default function Product() {
     setTimeout(() => {
       setLoad(false);
     }, 0);
-  };
-  const navigate = useNavigate();
-
-  const handlePush = (brand, title, id) => {
-    navigate(`/product?brand=${brand}&title=${title}&id=${id}`);
-    setSlide(0);
-    setLoad(true);
   };
 
   const text = "Check out this product!";
@@ -232,7 +224,7 @@ export default function Product() {
 
   const handlePayment = async (price) => {
     const options = {
-      key: "rzp_test_42qGrGuKRKTTXI", // Replace with your Razorpay Key,
+      key: "rzp_test_42qGrGuKRKTTXI",
       key_secret: "70NSAuXXCdkrImE87wz4g8OH",
       amount: `${price}00`, // Amount in paise (e.g., 50000 for ₹500)
       currency: "INR",
@@ -261,6 +253,62 @@ export default function Product() {
     const razorpay = new window.Razorpay(options);
     razorpay.open();
   };
+
+  const handleAddtoBag = async () => {
+    try {
+      const response = await Instance.post("/api/bag/add", {});
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  // --------------------------------------------------------------Getting Product------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------------------------
+  const navigate = useNavigate();
+
+  const handlePush = (brand, title, id) => {
+    navigate(`/product?brand=${brand}&title=${title}&id=${id}`);
+    setSlide(0);
+    setLoad(true);
+  };
+  const [data, setData] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const getProductById = async () => {
+    try {
+      // setLoad(true);
+      const response = await Instance.get(`/api/products/getProductbyId/${id}`);
+      setData(response.data);
+      // if (response.status === 200) {
+      //   // setLoad(false);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getProduct = async () => {
+    try {
+      // setLoad(true);
+      const response = await Instance.get("/api/products/getAllProducts");
+      setProducts(response.data);
+      console.log(response.data.map((i) => i.images[0]));
+      // if (response.status === 200) {
+      //   // setLoad(false);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    getProductById();
+    getProduct();
+  }, [id]);
+
+  console.log(data);
 
   return (
     <>
@@ -321,15 +369,13 @@ export default function Product() {
         </Box>
       </Modal>
       <Box sx={{ bgcolor: "rgb(206,206,206,0.3)", position: "relative" }}>
-        {AllProducts.map(
+        {data?.map(
           (i) =>
-            `${i.brand}&title=${i.file.title}=&id=${i.id.toString()}` ===
+            `${i.brand}&title=${i.title}=&id=${i._id.toString()}` ===
               `${brand}&title=${title}=&id=${id}` && (
-              // `product-${i.brand}-${i.file.title}-${i.id.toString()}` ===
-              //   product && (
               <>
                 <Grid
-                  key={i.id}
+                  key={i._id}
                   sx={{
                     maxWidth: { md: "90%", lg: "80%", xl: "70%" },
 
@@ -358,7 +404,7 @@ export default function Product() {
                     {/* ---------------------------------------IMAGES---------------------------------------------- */}
 
                     <Grid sx={{}}>
-                      {i.file.img.map((a, b) => (
+                      {i.images.map((a, b) => (
                         <Card
                           key={b}
                           sx={{
@@ -377,8 +423,8 @@ export default function Product() {
                           }}
                         >
                           <img
-                            src={a}
-                            alt={i.file.title}
+                            src={`${imageUrl}/${a}`}
+                            alt={i.title}
                             width={60}
                             height={60}
                             onLoad={() => handleLoad()}
@@ -397,8 +443,8 @@ export default function Product() {
                       }}
                     >
                       <img
-                        src={i.file.img[slide]}
-                        alt={i.file.title}
+                        src={`${imageUrl}/${i.images[slide]}`}
+                        alt={i.title}
                         width={400}
                         height={400}
                         onLoad={() => handleLoad()}
@@ -477,9 +523,9 @@ export default function Product() {
                               fontWeight: "500",
                               fontSize: "17px",
                             }}
-                            // onClick={() => {
-                            //   handlePayment(i.file.price);
-                            // }}
+                            onClick={() => {
+                              handleAddtoBag();
+                            }}
                           >
                             <ShoppingBagIcon x={{ fontSize: "19px" }} /> &nbsp;
                             Add to Bag
@@ -503,7 +549,7 @@ export default function Product() {
                               fontSize: "17px",
                             }}
                             onClick={() => {
-                              handlePayment(i.file.price);
+                              handlePayment(i.price);
                             }}
                           >
                             <FlashOnIcon sx={{ fontSize: "19px" }} /> &nbsp;Buy
@@ -518,7 +564,7 @@ export default function Product() {
 
                   <Grid sx={{ padding: 2, pt: 0, overflowX: "auto" }}>
                     <Typography align="left" sx={{ fontSize: "18px" }}>
-                      {i.file.title}
+                      {i.title}
                     </Typography>
                     <Typography
                       align="left"
@@ -532,10 +578,10 @@ export default function Product() {
                     </Typography>
                     <Grid sx={{ display: "flex" }}>
                       <Typography sx={{ fontSize: "30px", fontWeight: 500 }}>
-                        ₹{i.file.price}
+                        ₹{i.price}
                       </Typography>
                       &nbsp;&nbsp;
-                      {i.file.actualPrice !== i.file.price && (
+                      {i.actualPrice !== i.price && (
                         <>
                           <Typography
                             sx={{
@@ -544,7 +590,7 @@ export default function Product() {
                               lineHeight: "50px",
                             }}
                           >
-                            <del>₹{i.file.actualPrice}</del>
+                            <del>₹{i.actualPrice}</del>
                           </Typography>
                           &nbsp;&nbsp;
                           <Typography
@@ -555,7 +601,7 @@ export default function Product() {
                               fontSize: "16px",
                             }}
                           >
-                            {offer(i.file.price, i.file.actualPrice)}% off
+                            {offer(i.price, i.actualPrice)}% off
                           </Typography>
                         </>
                       )}
@@ -569,7 +615,7 @@ export default function Product() {
                         mt: 1,
                       }}
                     >
-                      {i.file.description}
+                      {i.description}
                     </Typography>
                     <Grid sx={{ mt: 2 }}>
                       <Typography
@@ -584,26 +630,26 @@ export default function Product() {
                         Strap Color
                       </Typography>
                       <Grid sx={{ display: "flex" }}>
-                        {AllProducts.map((c, d) =>
-                          c.file.model === i.file.model ? (
+                        {products.map((c, d) =>
+                          c.model === i.model ? (
                             <Card
                               key={d}
                               sx={{
                                 border: c.id === i.id ? 3 : 1,
                                 borderRadius: 2,
                                 borderColor:
-                                  c.id === i.id ? "#ff36ab" : "#ff9fdd",
+                                  c._id === i._id ? "#ff36ab" : "#ff9fdd",
                                 margin: 1,
                                 width: 60,
                                 height: 60,
                                 cursor: "pointer",
                               }}
                               onClick={() => {
-                                handlePush(c.brand, c.file.title, c.id);
+                                handlePush(c.brand, c.title, c._id);
                               }}
                             >
                               <img
-                                src={c.file.img[0]}
+                                src={`${imageUrl}/${c.images[0]}`}
                                 alt="Developing"
                                 width={60}
                                 height={60}
@@ -683,7 +729,7 @@ export default function Product() {
                         Highlights
                       </Typography>
                       <List>
-                        {i.spec.map((l, k) => (
+                        {i.spec[0].split(',').map((l, k) => (
                           <ListItem key={k}>
                             <FiberManualRecordIcon
                               sx={{ fontSize: "8px", color: "#9D9E9D", mr: 1 }}
@@ -707,7 +753,7 @@ export default function Product() {
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------                
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/}
                 <Grid
-                  key={i.id}
+                  key={i._id}
                   sx={{
                     maxWidth: "100%",
                     ml: "auto",
@@ -732,10 +778,10 @@ export default function Product() {
                     }}
                   >
                     <Slider {...settings}>
-                      {i.file.img.map((a, b) => (
+                      {i.images.map((a, b) => (
                         <img
                           key={b}
-                          src={a}
+                          src={`${imageUrl}/${a}`}
                           alt="Developing"
                           onLoad={() => handleLoad()}
                           loading="lazy"
@@ -798,7 +844,7 @@ export default function Product() {
 
                   <Grid sx={{ padding: 2 }}>
                     <Typography align="left" sx={{ fontSize: "18px" }}>
-                      {i.file.title}
+                      {i.title}
                     </Typography>
                     <Typography
                       align="left"
@@ -812,7 +858,7 @@ export default function Product() {
                     </Typography>
                     <Grid sx={{ display: "flex" }}>
                       <Typography sx={{ fontSize: "30px", fontWeight: 500 }}>
-                        ₹{i.file.price}
+                        ₹{i.price}
                       </Typography>
                       &nbsp;&nbsp;
                       <Typography
@@ -822,7 +868,7 @@ export default function Product() {
                           lineHeight: "50px",
                         }}
                       >
-                        <del>₹{i.file.actualPrice}</del>
+                        <del>₹{i.actualPrice}</del>
                       </Typography>
                       &nbsp;&nbsp;
                       <Typography
@@ -833,19 +879,19 @@ export default function Product() {
                           fontSize: "16px",
                         }}
                       >
-                        {offer(i.file.price, i.file.actualPrice)}% off
+                        {offer(i.price, i.actualPrice)}% off
                       </Typography>
                     </Grid>
                     <Grid sx={{ display: "flex", justifyContent: "center" }}>
-                      {AllProducts.map((c, d) =>
-                        c.file.model === i.file.model ? (
+                      {products.map((c, d) =>
+                        c.model === i.model ? (
                           <Card
                             key={d}
                             sx={{
-                              border: c.id === i.id ? 3 : 1,
+                              border: c._id === i._id ? 3 : 1,
                               borderRadius: 2,
                               borderColor:
-                                c.id === i.id ? "#ff36ab" : "#ff9fdd",
+                                c._id === i._id ? "#ff36ab" : "#ff9fdd",
                               margin: 1,
                               mt: 2,
                               // width: "100%",
@@ -853,11 +899,11 @@ export default function Product() {
                               cursor: "pointer",
                             }}
                             onClick={() => {
-                              handlePush(c.brand, c.file.title, c.id);
+                              handlePush(c.brand, c.title, c._id);
                             }}
                           >
                             <img
-                              src={c.file.img[0]}
+                              src={`${imageUrl}/${c.images[0]}`}
                               alt="Developing"
                               width={80}
                               height={80}
@@ -912,7 +958,7 @@ export default function Product() {
                             fontSize: "17px",
                           }}
                           onClick={() => {
-                            handlePayment(i.file.price);
+                            handlePayment(i.price);
                           }}
                         >
                           <FlashOnIcon sx={{ fontSize: "19px" }} /> &nbsp;Buy
@@ -939,7 +985,7 @@ export default function Product() {
                         mt: 1,
                       }}
                     >
-                      {i.file.description}
+                      {i.description}
                     </Typography>
                     <Typography
                       sx={{
@@ -953,7 +999,7 @@ export default function Product() {
                       Highlights
                     </Typography>
                     <List>
-                      {i.spec.map((l, k) => (
+                      {i.spec[0].split(',').map((l, k) => (
                         <ListItem key={k}>
                           <FiberManualRecordIcon
                             sx={{ fontSize: "8px", color: "#9D9E9D", mr: 1 }}
@@ -1046,81 +1092,83 @@ export default function Product() {
                       },
                     }}
                   >
-                    {AllProducts.filter(
-                      (item) => item.brand === i.brand && item.id !== i.id
-                    ).map((r) => (
-                      <Paper
-                        variant="outlined"
-                        key={r.id}
-                        sx={{
-                          // margin: 2,
-                          marginRight: 2,
-                          marginLeft: 2,
-                          marginTop: 2,
-                          marginBottom: 4,
-                          borderRadius: 1,
-                          // width: 100,
-                          cursor: "pointer",
-                        }}
-                        onClick={() => handlePush(r.brand, r.file.title, r.id)}
-                      >
-                        <img
-                          src={r.file.img[0]}
-                          alt={r.file.title}
-                          width={156}
-                          height={156}
-                        />
-                        <Typography
-                          align="left"
+                    {products
+                      .filter(
+                        (item) => item.brand === i.brand && item._id !== i._id
+                      )
+                      .map((r) => (
+                        <Paper
+                          variant="outlined"
+                          key={r._id}
                           sx={{
-                            fontSize: "13px",
-                            fontWeight: "500",
-                            mt: 2,
-                            padding: 1,
-                            overflowX: "auto",
-                          }}
-                        >
-                          {r.file.title.length > 50
-                            ? `${r.file.title.substring(0, 50)}...`
-                            : r.file.title}
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "left",
+                            // margin: 2,
+                            marginRight: 2,
+                            marginLeft: 2,
+                            marginTop: 2,
+                            marginBottom: 4,
+                            borderRadius: 1,
+                            // width: 100,
                             cursor: "pointer",
-                            padding: 1,
                           }}
+                          onClick={() => handlePush(r.brand, r.title, r._id)}
                         >
+                          <img
+                            src={`${imageUrl}/${r.images[0]}`}
+                            alt={r.title}
+                            width={156}
+                            height={156}
+                          />
                           <Typography
-                            align="center"
+                            align="left"
                             sx={{
-                              color: "black",
-                              fontWeight: "600",
                               fontSize: "13px",
-                            }}
-                          >
-                            ₹{r.file.price}
-                          </Typography>
-                          &nbsp;&nbsp;
-                          <Typography
-                            sx={{ color: "#e95144", fontSize: "13px" }}
-                          >
-                            <del>₹{r.file.actualPrice}</del>
-                          </Typography>
-                          &nbsp;&nbsp;
-                          <Typography
-                            sx={{
-                              color: "#2e8b57",
                               fontWeight: "500",
-                              fontSize: "13px",
+                              mt: 2,
+                              padding: 1,
+                              overflowX: "auto",
                             }}
                           >
-                            {offer(r.file.price, r.file.actualPrice)}%off
+                            {r.title.length > 50
+                              ? `${r.title.substring(0, 50)}...`
+                              : r.title}
                           </Typography>
-                        </Box>
-                      </Paper>
-                    ))}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "left",
+                              cursor: "pointer",
+                              padding: 1,
+                            }}
+                          >
+                            <Typography
+                              align="center"
+                              sx={{
+                                color: "black",
+                                fontWeight: "600",
+                                fontSize: "13px",
+                              }}
+                            >
+                              ₹{r.price}
+                            </Typography>
+                            &nbsp;&nbsp;
+                            <Typography
+                              sx={{ color: "#e95144", fontSize: "13px" }}
+                            >
+                              <del>₹{r.actualPrice}</del>
+                            </Typography>
+                            &nbsp;&nbsp;
+                            <Typography
+                              sx={{
+                                color: "#2e8b57",
+                                fontWeight: "500",
+                                fontSize: "13px",
+                              }}
+                            >
+                              {offer(r.price, r.actualPrice)}%off
+                            </Typography>
+                          </Box>
+                        </Paper>
+                      ))}
                   </Box>
                 </Box>
                 <br />

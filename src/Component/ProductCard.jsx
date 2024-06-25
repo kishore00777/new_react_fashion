@@ -9,14 +9,12 @@ import {
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import { useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
-import { useDispatch } from "react-redux";
-import { addToCart, heart } from "../Store/Reducer/ProductSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import { imageUrl } from "../Config/Common";
 
 export default function ProductCard({ data }) {
   const [openSnack, setOpenSnack] = useState(false);
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -27,6 +25,7 @@ export default function ProductCard({ data }) {
   const offer = (price, actualPrice) => {
     return Math.round(((actualPrice - price) / actualPrice) * 100);
   };
+
   return (
     <>
       <Snackbar
@@ -35,7 +34,7 @@ export default function ProductCard({ data }) {
         onClose={() => {
           setOpenSnack(false);
         }}
-        message="Added to Bag Successfully"
+        message="Added to Cart Successfully"
         action={
           <IconButton
             size="small"
@@ -51,116 +50,123 @@ export default function ProductCard({ data }) {
       />
       <>
         {data?.map((i) => (
-          <Paper
-            key={i.id}
-            variant="outlined"
-            sx={{
-              width: 300,
-              height: 415,
-              borderColor: "white",
-              overflow: "hidden",
-              // p: 2,
-              margin: 2,
-              position: "relative",
-            }}
-          >
-            <Box sx={{}}>
-              <img
-                src={i.file.img[0]}
-                alt={i.file.title}
-                width={300}
-                height={300}
-                priority
-                onClick={() => handlePush(i.brand, i.file.title, i.id)}
-                style={{ cursor: "pointer" }}
-              />
-
-              <Box
-                sx={{
-                  position: "absolute",
-                  right: 0,
-                  top: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <IconButton
-                  onClick={() => {
-                    dispatch(heart({ productId: i.id }));
-                  }}
-                  sx={{
-                    color:
-                      i.fav === "heart" ? "#FF3040" : "rgb(157,158,157,0.5)",
-                  }}
-                >
-                  <FavoriteRoundedIcon sx={{ fontSize: "30px" }} />
-                </IconButton>
-              </Box>
-            </Box>
-            <br />
-            <Box
-              sx={{ cursor: "pointer" }}
-              onClick={() => handlePush(i.brand, i.file.title, i.id)}
-            >
-              <Typography
-                align="left"
-                sx={{ fontSize: "15px", fontWeight: "500" }}
-              >
-                {i.file.title.length > 35
-                  ? `${i.file.title.substring(0, 35)}...`
-                  : i.file.title}
-              </Typography>
-              <Typography
-                align="left"
-                sx={{ fontWeight: "600", color: "#9D9E9D", fontSize: "12px" }}
-              >
-                {i.brand}
-              </Typography>
-            </Box>
-            <Grid
+          <>
+            <Paper
+              key={i._id}
+              variant="outlined"
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mt: 2,
+                minWidth: 300,
+                height: 420,
+                borderColor: "white",
+                overflow: "hidden",
+                // p: 2,
+                margin: 2,
+                position: "relative",
               }}
             >
+              <Box sx={{}}>
+                <img
+                  src={`${imageUrl}/${i.images[0]}`}
+                  alt={i.title}
+                  width={300}
+                  height={300}
+                  priority
+                  onClick={() => handlePush(i.brand, i.title, i._id)}
+                  style={{ cursor: "pointer" }}
+                />
+
+                <Box
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <IconButton
+                  // onClick={() => {
+                  //   dispatch(heart({ productId: i.id }));
+                  // }}
+                  // sx={{
+                  //   color:
+                  //     i.fav === "heart" ? "#FF3040" : "rgb(157,158,157,0.5)",
+                  // }}
+                  >
+                    <FavoriteRoundedIcon sx={{ fontSize: "30px" }} />
+                  </IconButton>
+                </Box>
+              </Box>
+              <br />
               <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "left",
-                  cursor: "pointer",
-                }}
-                onClick={() => handlePush(i.brand, i.file.title, i.id)}
+                sx={{ cursor: "pointer", padding: "0 5px" }}
+                onClick={() => handlePush(i.brand, i.file.title, i._id)}
               >
                 <Typography
-                  align="center"
-                  sx={{ color: "black", fontWeight: "600", fontSize: "15px" }}
+                  align="left"
+                  sx={{ fontSize: "15px", fontWeight: "500" }}
                 >
-                  ₹{i.file.price}
+                  {i.title.length > 35
+                    ? `${i.title.substring(0, 35)}...`
+                    : i.title}
                 </Typography>
-                &nbsp;&nbsp;
-                {i.file.actualPrice !== i.file.price && (
-                  <>
-                    <Typography sx={{ color: "#e95144", fontSize: "15px" }}>
-                      <del>₹{i.file.actualPrice}</del>
-                    </Typography>
-                    &nbsp;&nbsp;
-                    <Typography
-                      sx={{
-                        color: "#2e8b57",
-                        fontWeight: "500",
-                        fontSize: "15px",
-                      }}
-                    >
-                      {offer(i.file.price, i.file.actualPrice)}%off
-                    </Typography>
-                  </>
-                )}
+                <Typography
+                  align="left"
+                  sx={{ fontWeight: "600", color: "#9D9E9D", fontSize: "12px" }}
+                >
+                  {i.brand}
+                </Typography>
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "right" }}>
-                {" "}
-                {i.productCount === null && (
+              <Grid
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mt: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "left",
+                    cursor: "pointer",
+                    padding: "0 5px",
+                  }}
+                  onClick={() => handlePush(i.brand, i.title, i.id)}
+                >
+                  <Typography
+                    align="center"
+                    sx={{ color: "black", fontWeight: "600", fontSize: "15px" }}
+                  >
+                    ₹{i.price}
+                  </Typography>
+                  &nbsp;&nbsp;
+                  {i.actualPrice !== i.price && (
+                    <>
+                      <Typography sx={{ color: "#e95144", fontSize: "15px" }}>
+                        <del>₹{i.actualPrice}</del>
+                      </Typography>
+                      &nbsp;&nbsp;
+                      <Typography
+                        sx={{
+                          color: "#2e8b57",
+                          fontWeight: "500",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {offer(i.price, i.actualPrice)}%off
+                      </Typography>
+                    </>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "right",
+                    padding: "0 5px",
+                  }}
+                >
+                  {" "}
                   <Button
                     variant="contained"
                     size="small"
@@ -172,17 +178,17 @@ export default function ProductCard({ data }) {
                       borderRadius: 10,
                       "&:hover": { bgcolor: "green", color: "white" },
                     }}
-                    onClick={() => {
-                      dispatch(addToCart({ productId: i.id }));
-                      setOpenSnack(true);
-                    }}
+                    // onClick={() => {
+                    //   dispatch(addToCart({ productId: i.id }));
+                    //   setOpenSnack(true);
+                    // }}
                   >
-                    Add to Bag
+                    Add to Cart
                   </Button>
-                )}
-              </Box>
-            </Grid>
-          </Paper>
+                </Box>
+              </Grid>
+            </Paper>
+          </>
         ))}
       </>
     </>
