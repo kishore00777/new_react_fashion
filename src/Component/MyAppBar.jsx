@@ -47,6 +47,8 @@ export default function MyAppBar() {
   const location = useLocation();
   const auth = useSelector((state) => state.auth?.isAuth);
   const userName = useSelector((state) => state.auth.user?.userName);
+  const email = useSelector((state) => state.auth.user?.email);
+  console.log(email);
   const mail = cookies.get("email-fashion");
 
   const LoGout = async () => {
@@ -127,7 +129,7 @@ export default function MyAppBar() {
           </ListItemIcon>
           Change Password
         </MenuItem>
-        {mail === "kishoremurgan0077@gmail.com" && (
+        {email === "kishoremurgan0077@gmail.com" && (
           <MenuItem
             onClick={() => {
               handleClose();
