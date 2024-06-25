@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Instance, setToken } from "../Config/Common";
 import {
+  TriggerOff,
   loginFail,
   loginStart,
   loginSuccess,
@@ -42,8 +43,9 @@ export default function Login() {
       const { token } = response.data;
       const { id } = response.data;
       const { email } = response.data;
-      dispatch(loginSuccess(response.data));
       setToken(token);
+      dispatch(loginSuccess(response.data));
+      dispatch(TriggerOff());
       cookies.set("token-fashion", token);
       cookies.set("email-fashion", email);
       cookies.set("id", id);

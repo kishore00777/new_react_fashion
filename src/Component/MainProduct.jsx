@@ -18,7 +18,6 @@ export default function MainProduct() {
       setLoad(true);
       const response = await Instance.get("/api/products/getAllProducts");
       setData(response.data);
-      console.log(response.data.map((i) => i.images[0]));
       if (response.status === 200) {
         setLoad(false);
       }

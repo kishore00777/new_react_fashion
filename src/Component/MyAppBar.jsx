@@ -2,6 +2,7 @@ import { Settings } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Container,
@@ -14,21 +15,26 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import LockIcon from "@mui/icons-material/Lock";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Instance } from "../Config/Common";
 import {
+  TriggerOn,
   logoutFail,
   logoutStart,
   logoutSuccess,
 } from "../Store/Reducer/AuthSlice";
 import Cookies from "universal-cookie";
+import {
+  failedtogetTotalCount,
+  fetchedTotalCount,
+  getTotalCount,
+} from "../Store/Reducer/CartSlice";
 
 export default function MyAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -48,8 +54,19 @@ export default function MyAppBar() {
   const auth = useSelector((state) => state.auth?.isAuth);
   const userName = useSelector((state) => state.auth.user?.userName);
   const email = useSelector((state) => state.auth.user?.email);
-  console.log(email);
-  const mail = cookies.get("email-fashion");
+  const Success = useSelector((state) => state.cart.success);
+  const count = useSelector((state) => state.cart.count);
+
+  const ProductCount = async () => {
+    dispatch(getTotalCount());
+    try {
+      const response = await Instance.get("/api/bag/noOfProductsInCart");
+      dispatch(fetchedTotalCount(response.data.total));
+    } catch (error) {
+      console.error(error);
+      dispatch(failedtogetTotalCount(error.toString()));
+    }
+  };
 
   const LoGout = async () => {
     try {
@@ -63,6 +80,9 @@ export default function MyAppBar() {
       dispatch(logoutFail(error));
     }
   };
+  useEffect(() => {
+    ProductCount();
+  }, [Success]);
   return (
     <>
       {" "}
@@ -295,7 +315,6 @@ export default function MyAppBar() {
                   Shop
                 </Link>
                 <Link
-                  to="/cart"
                   style={{
                     color: "white",
                     fontWeight: "300",
@@ -303,12 +322,29 @@ export default function MyAppBar() {
                     textDecoration: "none",
                     margin: 15,
                   }}
+                  onClick={() => {
+                    if (!auth) {
+                      dispatch(TriggerOn());
+                      return;
+                    }
+                    navigate("/cart");
+                  }}
                 >
-                  <IconButton>
-                    <ShoppingCartIcon
-                      sx={{ color: "white", fontSize: "30px" }}
-                    />
-                  </IconButton>{" "}
+                  <>
+                    <Badge
+                      badgeContent={count}
+                      color="secondary"
+                      sx={{
+                        "& .MuiBadge-badge": {
+                          color: "white", // Change this to your desired color
+                        },
+                      }}
+                    >
+                      <ShoppingCartIcon
+                        sx={{ color: "white", fontSize: "30px" }}
+                      />
+                    </Badge>
+                  </>{" "}
                 </Link>
                 {/* <Link
                   to="/about"

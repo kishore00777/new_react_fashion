@@ -7,6 +7,7 @@ const AuthSlice = createSlice({
     user: null,
     Loading: false,
     error: null,
+    trigger: false,
   },
   reducers: {
     loginStart(state) {
@@ -35,6 +36,12 @@ const AuthSlice = createSlice({
       state.Loading = false;
       state.error = action.payload;
     },
+    TriggerOn(state) {
+      state.trigger = true;
+    },
+    TriggerOff(state) {
+      state.trigger = false;
+    },
   },
 });
 
@@ -45,5 +52,7 @@ export const {
   logoutStart,
   logoutSuccess,
   logoutFail,
+  TriggerOn,
+  TriggerOff,
 } = AuthSlice.actions;
 export default AuthSlice.reducer;

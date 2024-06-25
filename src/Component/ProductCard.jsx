@@ -11,12 +11,21 @@ import { useState } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
-import { imageUrl } from "../Config/Common";
+import { Instance, imageUrl } from "../Config/Common";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  AddedtoCart,
+  AddtoCart,
+  FailedtoAdd,
+} from "../Store/Reducer/CartSlice";
+import { ProtectAuth, TriggerOn } from "../Store/Reducer/AuthSlice";
+import TriggerModal from "./Auth/TriggerModal";
 
 export default function ProductCard({ data }) {
   const [openSnack, setOpenSnack] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handlePush = (brand, title, id) => {
     navigate(`/product?brand=${brand}&title=${title}&id=${id}`);
@@ -24,6 +33,27 @@ export default function ProductCard({ data }) {
 
   const offer = (price, actualPrice) => {
     return Math.round(((actualPrice - price) / actualPrice) * 100);
+  };
+
+  const userId = useSelector((state) => state.auth.user?.id);
+  const auth = useSelector((state) => state.auth.isAuth);
+
+  const AddProductToCart = async (id) => {
+    if (!auth) {
+      dispatch(TriggerOn());
+      return;
+    }
+    dispatch(AddtoCart());
+    try {
+      const response = await Instance.post(`/api/bag/add/${userId}/${id}`, {
+        count: 1,
+      });
+      dispatch(AddedtoCart());
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      dispatch(FailedtoAdd(error.toString()));
+    }
   };
 
   return (
@@ -100,7 +130,7 @@ export default function ProductCard({ data }) {
               <br />
               <Box
                 sx={{ cursor: "pointer", padding: "0 5px" }}
-                onClick={() => handlePush(i.brand, i.file.title, i._id)}
+                onClick={() => handlePush(i.brand, i.title, i._id)}
               >
                 <Typography
                   align="left"
@@ -178,10 +208,9 @@ export default function ProductCard({ data }) {
                       borderRadius: 10,
                       "&:hover": { bgcolor: "green", color: "white" },
                     }}
-                    // onClick={() => {
-                    //   dispatch(addToCart({ productId: i.id }));
-                    //   setOpenSnack(true);
-                    // }}
+                    onClick={() => {
+                      AddProductToCart(i._id);
+                    }}
                   >
                     Add to Cart
                   </Button>

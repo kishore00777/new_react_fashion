@@ -21,6 +21,7 @@ import Admin from "./pages/Admin";
 import ViewProducts from "./pages/Admin/ViewProducts";
 import Loading from "./Component/Loading";
 import Cart from "./pages/Cart";
+import TriggerModal from "./Component/Auth/TriggerModal";
 
 export default function MyRouter() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -48,7 +49,9 @@ export default function MyRouter() {
   };
 
   useEffect(() => {
-    onReload();
+    if (CookieToken || LocalToken) {
+      onReload();
+    }
   }, []);
 
   useEffect(() => {
@@ -65,10 +68,9 @@ export default function MyRouter() {
     };
   }, []);
 
-  console.log(isOnline);
-
   return (
     <BrowserRouter>
+      <TriggerModal />
       {!isOnline ? (
         <Loading />
       ) : (
