@@ -9,17 +9,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import {
-  loginFail,
-  loginStart,
-  loginSuccess,
-} from "../../Store/Reducer/AuthSlice";
+import { onLogin } from "../../Store/Reducer/AuthSlice";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { TriggerOff } from "../../Store/Reducer/AuthSlice";
-import { Instance, setToken } from "../../Config/Common";
 
 const style = {
   position: "absolute",
@@ -39,34 +33,14 @@ export default function TriggerModal() {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cookies = new Cookies();
 
   const HandleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
-  const onLogin = async () => {
-    try {
-      dispatch(loginStart());
-      const response = await Instance.post(`/api/auth/user/logIn`, {
-        email: data.mail,
-        password: data.Password,
-      });
-      const { token } = response.data;
-      const { id } = response.data;
-      const { email } = response.data;
-      dispatch(loginSuccess(response.data));
-      dispatch(TriggerOff());
-      setToken(token);
-      cookies.set("token-fashion", token);
-      cookies.set("email-fashion", email);
-      cookies.set("id", id);
-      setOpen(false);
-      navigate("/shop");
-    } catch (err) {
-      dispatch(loginFail(err));
-      console.error(err);
-    }
+  const handleLogin = async () => {
+    onLogin(dispatch, navigate, data.mail, data.Password);
+    setOpen(false);
   };
 
   const [open, setOpen] = React.useState(false);
@@ -139,7 +113,7 @@ export default function TriggerModal() {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                     onClick={() => {
-                      onLogin();
+                      handleLogin();
                     }}
                   >
                     Log In

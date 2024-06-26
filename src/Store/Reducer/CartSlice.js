@@ -27,7 +27,6 @@ const CartSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.success = false;
-      
     },
     fetchedTotalCount(state, action) {
       state.loading = false;

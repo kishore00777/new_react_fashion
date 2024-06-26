@@ -52,12 +52,16 @@ export default function MyAppBar() {
   const dispatch = useDispatch();
   const location = useLocation();
   const auth = useSelector((state) => state.auth?.isAuth);
+  const loading = useSelector((state) => state.auth?.Loading);
   const userName = useSelector((state) => state.auth.user?.userName);
   const email = useSelector((state) => state.auth.user?.email);
   const Success = useSelector((state) => state.cart.success);
   const count = useSelector((state) => state.cart.count);
 
   const ProductCount = async () => {
+    if (!auth) {
+      return;
+    }
     dispatch(getTotalCount());
     try {
       const response = await Instance.get("/api/bag/noOfProductsInCart");
@@ -83,6 +87,8 @@ export default function MyAppBar() {
   useEffect(() => {
     ProductCount();
   }, [Success]);
+
+  console.log(loading);
   return (
     <>
       {" "}
@@ -332,7 +338,7 @@ export default function MyAppBar() {
                 >
                   <>
                     <Badge
-                      badgeContent={count}
+                      badgeContent={auth ? count : null}
                       color="secondary"
                       sx={{
                         "& .MuiBadge-badge": {
@@ -359,8 +365,8 @@ export default function MyAppBar() {
                   About
                 </Link> */}
 
-                {location.pathname === "/login" ||
-                location.pathname === "/signup" ? null : auth ? (
+                {loading ? null : location.pathname === "/login" ||
+                  location.pathname === "/signup" ? null : auth ? (
                   <Tooltip title="Account settings">
                     {/* <IconButton
                         size="small"
@@ -389,7 +395,7 @@ export default function MyAppBar() {
                   </Tooltip>
                 ) : (
                   <Link
-                    to="/login"
+                    // to="/login"
                     style={{
                       color: "white",
                       fontWeight: "300",
@@ -409,6 +415,7 @@ export default function MyAppBar() {
                           color: "#ffffff",
                         },
                       }}
+                      onClick={() => dispatch(TriggerOn())}
                     >
                       Login
                     </Button>

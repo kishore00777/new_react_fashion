@@ -16,7 +16,7 @@ import CancellationPolicy from "./pages/CancellationPolicy";
 import { Instance } from "./Config/Common";
 import Cookies from "universal-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { loginFail, loginStart, loginSuccess } from "./Store/Reducer/AuthSlice";
+import { loginFail, loginStart, loginSuccess, onReload } from "./Store/Reducer/AuthSlice";
 import Admin from "./pages/Admin";
 import ViewProducts from "./pages/Admin/ViewProducts";
 import Loading from "./Component/Loading";
@@ -35,22 +35,11 @@ export default function MyRouter() {
   const mail = cookies.get("email-fashion");
   const LocalToken = localStorage.getItem("token");
 
-  const onReload = async () => {
-    dispatch(loginStart());
-    try {
-      const response = await Instance.get("/api/auth/user/getme", {
-        headers: { "x-auth-token": CookieToken || LocalToken },
-      });
-      dispatch(loginSuccess(response.data));
-    } catch (error) {
-      dispatch(loginFail(error));
-      console.error(error);
-    }
-  };
+
 
   useEffect(() => {
     if (CookieToken || LocalToken) {
-      onReload();
+      onReload(dispatch);
     }
   }, []);
 

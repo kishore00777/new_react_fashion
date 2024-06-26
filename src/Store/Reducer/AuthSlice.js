@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Instance, setToken } from "../../Config/Common";
+import Cookies from "universal-cookie";
 
 const AuthSlice = createSlice({
   name: "auth",
@@ -56,3 +58,42 @@ export const {
   TriggerOff,
 } = AuthSlice.actions;
 export default AuthSlice.reducer;
+
+const cookies = new Cookies();
+
+export const onLogin = async (dispatch, navigate, email, password) => {
+  try {
+    dispatch(loginStart());
+    const response = await Instance.post(`/api/auth/user/logIn`, {
+      email,
+      password,
+    });
+    const { token } = response.data;
+    const { id } = response.data;
+    dispatch(loginSuccess(response.data));
+    dispatch(TriggerOff());
+    setToken(token);
+    cookies.set("token-fashion", token);
+    cookies.set("id", id);
+    navigate("/shop");
+    onReload(dispatch);
+  } catch (err) {
+    dispatch(loginFail(err));
+    console.error(err);
+  }
+};
+
+export const onReload = async (dispatch) => {
+  const CookieToken = cookies.get("token-fashion");
+  const LocalToken = localStorage.getItem("token");
+  dispatch(loginStart());
+  try {
+    const response = await Instance.get("/api/auth/user/getme", {
+      headers: { "x-auth-token": CookieToken || LocalToken },
+    });
+    dispatch(loginSuccess(response.data));
+  } catch (error) {
+    dispatch(loginFail(error));
+    console.error(error);
+  }
+};

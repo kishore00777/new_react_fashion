@@ -127,7 +127,7 @@ export default function ProductCard({ data }) {
                   </IconButton>
                 </Box>
               </Box>
-              <br />
+              {/* <br /> */}
               <Box
                 sx={{ cursor: "pointer", padding: "0 5px" }}
                 onClick={() => handlePush(i.brand, i.title, i._id)}
